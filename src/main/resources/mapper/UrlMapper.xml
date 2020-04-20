@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rainier.mapper.UrlDao" >
+  <delete id="deleteImgurlByUrl" >
+    delete from imgurl where url not in
+    <foreach collection="urlList"  index="index" item="item" open="(" separator="," close=")"  >
+      #{item}
+    </foreach>
+  </delete>
+
+  <select id="getImgurlLujing" resultType="map">
+    select `name` from imgurl
+  </select>
+
+  <select id="getImgUrlByUrl" resultType="map">
+    select * from imgurl where url = #{url}
+  </select>
+
+  <delete id="deleteImgUrlById">
+    delete from imgurl where id = #{id}
+  </delete>
+
+</mapper>

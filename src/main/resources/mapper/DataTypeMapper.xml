@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rainier.mapper.DataTypeMapper" >
+  <select id="getDataTypeByName" resultType="com.rainier.model.DataType">
+    select * from datatype where `name` = #{name}
+  </select>
+
+  <insert id="addDateType" >
+    insert into datatype(`name`,newDate)
+    values (#{name},#{newDate})
+  </insert>
+
+  <update id="updateDateType">
+    update datatype set `name` = #{name},newDate = #{newDate} where id = #{id}
+  </update>
+
+  <select id="getDataTypeCount" resultType="java.lang.Integer">
+    select count(*) from datatype
+    <where>
+      <if test="name != null and name != ''">
+        name like '%${name}%'
+      </if>
+    </where>
+  </select>
+
+  <select id="getDataTypeList" resultType="com.rainier.model.DataType">
+    select * from datatype
+    <where>
+      <if test="name != null and name != ''">
+        name like '%${name}%'
+      </if>
+    </where>
+    limit #{pageState},#{pageSize}
+  </select>
+
+  <delete id="deleteDataType">
+    delete from datatype
+    <where>
+      id in
+      <foreach collection="dataTypeids"  index="index" item="item" open="(" separator="," close=")"  >
+        #{item}
+      </foreach>
+    </where>
+  </delete>
+
+  <select id="getDataTypeById" resultType="com.rainier.model.DataType">
+    select * from datatype where id = #{dataTypeId}
+  </select>
+</mapper>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rainier.mapper.ContentMapper" >
+
+  <select id="getAllUrl" resultType="map">
+    select imgUrl from content
+  </select>
+
+  <insert id="addContent">
+    insert into content(title,labelId,content,imgUrl)
+    values (#{content.title},#{content.labelId},#{content.content},#{content.imgUrl})
+  </insert>
+
+  <update id="updateContent">
+    update content set title = #{content.title},labelId = #{content.labelId},content = #{content.content},imgUrl = #{content.imgUrl}
+        where id = #{content.id}
+  </update>
+
+  <select id="getContentListCount" resultType="java.lang.Integer">
+    select count(*) from content
+
+        <where>
+          <if test="title != null and title != ''">
+            title like '%${title}%'
+          </if>
+          <if test="title != null and title != '' and labelId != null and labelId != ''">
+            AND
+          </if>
+          <if test="labelId != null and labelId != ''">
+            labelId = #{labelId}
+          </if>
+        </where>
+  </select>
+
+  <select id="getContentList" resultType="com.rainier.model.Content">
+    select * from content
+    <where>
+      <if test="title != null and title != ''">
+        title like '%${title}%'
+      </if>
+      <if test="title != null and title != '' and labelId != null and labelId != ''">
+        AND
+      </if>
+      <if test="labelId != null and labelId != ''">
+        labelId = #{labelId}
+      </if>
+    </where>
+    limit #{pageStart},#{pageSize}
+  </select>
+
+  <delete id="deleteLabel" >
+    delete from content
+    <where>
+      <if test="contentids !=null and contentids.size > 0">
+        id in
+        <foreach collection="contentids"  index="index" item="item" open="(" separator="," close=")"  >
+          #{item}
+        </foreach>
+      </if>
+    </where>
+  </delete>
+
+  <select id="getContentById" resultType="com.rainier.model.Content">
+    select * from content where id = #{contentid}
+  </select>
+
+</mapper>

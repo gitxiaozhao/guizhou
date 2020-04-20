@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rainier.mapper.LaboratoryMapper" >
+
+  <insert id="addLaboratory" parameterType="com.rainier.model.Laboratory" >
+    insert into `laboratory`(`title`,abstracts,source,release_date,img,recommend,ltid)
+    values (#{laboratory.title},#{laboratory.abstracts},#{laboratory.source},#{laboratory.releaseDate},
+    #{laboratory.img},#{laboratory.recommend},#{laboratory.ltid})
+  </insert>
+
+
+  <update id="updateLaboratory" parameterType="com.rainier.model.Laboratory" >
+    update `laboratory` set `title` = #{laboratory.title},abstracts = #{laboratory.abstracts},
+        source = #{laboratory.source},release_date = #{laboratory.releaseDate},img = #{laboratory.img},
+        recommend = #{laboratory.recommend},ltid = #{laboratory.ltid}
+        where id = #{laboratory.id}
+  </update>
+
+    <select id="getAllUrl" resultType="map">
+        select img from `laboratory`
+    </select>
+
+    <select id="queryLaboratoryCount" resultType="java.lang.Integer">
+        select count(*) from `laboratory`,`laboratory_type`
+        <where>
+            `laboratory`.ltid = `laboratory_type`.id
+            <if test="key != null and key != ''">
+                title like '%${key}%'
+            </if>
+        </where>
+    </select>
+
+    <select id="queryLaboratoryList" resultType="map">
+        select `laboratory`.id,title,abstracts,source,release_date as releaseDate,img,img_date as imgDate,recommend,ltid,`name`
+        from `laboratory`,`laboratory_type`
+        <where>
+            `laboratory`.ltid = `laboratory_type`.id
+            <if test="key != null and key != ''">
+                and title like '%${key}%'
+            </if>
+        </where>
+        limit #{pageIndex},#{pageSize}
+    </select>
+
+    <select id="getLaboratoryById" resultType="map">
+        select id,title,abstracts,source,release_date as releaseDate,img,recommend,ltid from `laboratory`
+        <where>
+            id = #{laboratory.id}
+        </where>
+    </select>
+
+    <delete id="deleteLaboratoryByIds" >
+        delete from `laboratory`
+        <where>
+            <if test="ids !=null and ids.size > 0">
+                id in
+                <foreach collection="ids"  index="index" item="item" open="(" separator="," close=")"  >
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+
+    <select id="getLaboratoryListByRecommend1" resultType="map">
+        select id,title,abstracts,source,release_date as releaseDate,img,recommend,ltid from `laboratory`
+        <where>
+            recommend = 1 and ltid = #{ltid}
+        </where>
+
+    </select>
+
+
+</mapper>

@@ -1,0 +1,33 @@
+# PageHelper配置
+pagehelper:
+  offset-as-page-num: true
+  row-bounds-with-count: true
+  reasonable: true
+  params: count=countSql
+mybatis:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.rainier
+  configuration:
+    call-setters-on-nulls: true
+#数据库连接
+spring:
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://127.0.0.1:3306/project_system?useUnicode=true&characterEncoding=UTF-8&autoReconnectForPools=true&autoReconnect=true&failOverReadOnly=false
+    tomcat:
+      validation-query: SELECT 1
+      test-on-borrow: true
+    driver-class-name: com.mysql.jdbc.Driver
+  jackson:
+    #设置空如何序列化
+    defaultPropertyInclusion: ALWAYS
+server:
+  port: 8080
+
+cbs:
+  imagesPath: file:/D:/fileUpload/
+imgurl: /images/
+#imgurl: http://192.168.1.182:8080/images/
+
+

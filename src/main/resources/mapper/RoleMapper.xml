@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rainier.mapper.RoleMapper" >
+
+
+  <insert id="addRole" parameterType="com.rainier.model.Role">
+    insert into role (`name`,`describe`) values (#{role.name},#{role.describe})
+  </insert>
+
+  <update id="updateRole"  parameterType="com.rainier.model.Role">
+    update role set `name` = #{role.name},`describe` = #{role.describe} where id = #{role.id}
+  </update>
+
+  <delete id="deleteRoleMenu">
+    delete from rolemenu where roleid = #{roleid}
+  </delete>
+
+  <insert id="addRoleMenu" >
+    insert into rolemenu (roleid,menuid) values
+    <foreach collection ="menuids" item="item" index= "index" separator ="," open="" close="">
+      (#{roleid},#{item})
+    </foreach >
+  </insert>
+
+  <delete id="deleteRole">
+    delete from role
+      <where>
+          <if test="roleids !=null and roleids.size > 0">
+              id in
+              <foreach collection="roleids"  index="index" item="item" open="(" separator="," close=")"  >
+                  #{item}
+              </foreach>
+          </if>
+      </where>
+  </delete>
+
+  <delete id="deleteUserRoleByRoleid" >
+    delete from userrole
+      <where>
+          <if test="roleids !=null and roleids.size > 0">
+              roleid in
+              <foreach collection="roleids"  index="index" item="item" open="(" separator="," close=")"  >
+                  #{item}
+              </foreach>
+          </if>
+      </where>
+  </delete>
+
+  <select id="queryUserCount" resultType="java.lang.Integer">
+    select count(*) from role
+        <where>
+          <if test="name != null and name != ''">
+            `name` like '%${name}%'
+          </if>
+        </where>
+  </select>
+
+  <select id="queryUserList" resultType="com.rainier.model.Role">
+    select * from role
+        <where>
+        <if test="name != null and name != ''">
+            `name` like '%${name}%'
+        </if>
+        </where>
+        limit #{pageStart},#{pageSize}
+  </select>
+
+    <select id="queryRoleByid" resultType="java.util.LinkedHashMap">
+        select * from `role` where id = #{roleid}
+    </select>
+
+    <delete id="deleteRoleMenus">
+        delete from rolemenu
+        <where>
+            <if test="roleids !=null and roleids.size > 0">
+                roleid in
+                <foreach collection="roleids"  index="index" item="item" open="(" separator="," close=")"  >
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+</mapper>

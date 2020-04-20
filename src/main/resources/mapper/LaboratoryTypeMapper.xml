@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rainier.mapper.LaboratoryTypeMapper" >
+
+  <insert id="addLaboratoryType" parameterType="com.rainier.model.LaboratoryType" >
+    insert into `laboratory_type`(`name`,img_date)
+    values (#{laboratoryType.name},#{laboratoryType.imgDate})
+  </insert>
+
+
+  <update id="updateLaboratoryType" parameterType="com.rainier.model.LaboratoryType" >
+    update `laboratory_type` set `name` = #{laboratoryType.name},img_date = #{laboratoryType.imgDate}
+        where id = #{laboratoryType.id}
+  </update>
+
+  <select id="getLaboratoryTypeById" resultType="com.rainier.model.LaboratoryType">
+    select id,`name`,img_date as imgDate from `laboratory_type` where id = #{id}
+  </select>
+
+  <select id="queryLaboratoryTypeCount" resultType="java.lang.Integer">
+    select count(*) from `laboratory_type`
+    <if test="key != null and key != ''">
+      <where>
+        name like '%${key}%'
+      </where>
+    </if>
+
+  </select>
+
+  <select id="queryLaboratoryTypeList" resultType="com.rainier.model.LaboratoryType">
+    select id,`name`,img_date as imgDate from `laboratory_type`
+    <if test="key != null and key != ''">
+      <where>
+        name like '%${key}%'
+      </where>
+    </if>
+    limit #{pageIndex},#{pageSize}
+  </select>
+
+  <delete id="deleteLaboratoryType">
+    delete from `laboratory_type`
+    <where>
+      <if test="ids !=null and ids.size > 0">
+        id in
+        <foreach collection="ids" item="item" index="index"  open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+    </where>
+  </delete>
+
+  <select id="getAllLaboratoryType" resultType="com.rainier.model.LaboratoryType">
+    select id,`name`,img_date as imgDate from `laboratory_type`
+  </select>
+</mapper>
